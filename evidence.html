@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Evidence Image</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { display:flex; align-items:center; justify-content:center; min-height:100vh; background:#0f0f0f; }
+        .viewer { max-width:1100px; width:100%; padding:20px; text-align:center; }
+        .viewer img { max-width:100%; height:auto; border-radius:8px; border:1px solid #222; }
+        .back { display:inline-block; margin-top:18px; color:var(--text-secondary); }
+        .back a { color:var(--text-primary); text-decoration:none; border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:8px; }
+    </style>
+</head>
+<body>
+    <div class="viewer">
+        <div id="imgWrap">Loading image...</div>
+        <div class="back"><a href="index.html">← Back</a></div>
+    </div>
+
+    <script>
+        (function(){
+            function getParam(name){
+                const params = new URLSearchParams(window.location.search);
+                return params.get(name);
+            }
+
+            const imgParam = getParam('img');
+            const wrap = document.getElementById('imgWrap');
+
+            if (!imgParam) {
+                wrap.textContent = 'No image specified.';
+                return;
+            }
+
+            // Basic decode and set src
+            try {
+                const decoded = decodeURIComponent(imgParam);
+                const img = document.createElement('img');
+                img.src = decoded;
+                img.alt = 'Evidence image';
+                img.onload = function(){ /* nothing */ };
+                img.onerror = function(){ wrap.textContent = 'Unable to load image: ' + decoded; };
+                wrap.innerHTML = '';
+                wrap.appendChild(img);
+            } catch(e){
+                wrap.textContent = 'Invalid image parameter.';
+            }
+        })();
+    </script>
+</body>
+</html>
